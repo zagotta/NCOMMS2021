@@ -1,0 +1,34 @@
+<ROSETTASCRIPTS>
+	<TASKOPERATIONS>
+		<RestrictToRepacking name="restrict"/>
+		<IncludeCurrent	  name="keep_curr"/>
+	</TASKOPERATIONS>
+    <SCOREFXNS>
+        <ScoreFunction name="fawt2" weights="beta_cart" symmetric="1">
+            <Reweight scoretype="atom_pair_constraint" weight="1.0"/>
+            <Reweight scoretype="coordinate_constraint" weight="1.0"/>
+            <Reweight scoretype="fa_sol" weight="0.0"/>
+            <Reweight scoretype="fa_rep" weight="0.7"/>
+        </ScoreFunction>
+    </SCOREFXNS>
+    <FILTERS>
+    </FILTERS>
+    <MOVERS>
+		<ConstraintSetMover name="csts" cst_file="%%cstfile%%"/>
+		<SetupForSymmetry name="sym" definition="c4.sym"/>
+        <FastRelax name="relax1" scorefxn="fawt2" repeats="1" />
+        <FastRelax name="relax3" scorefxn="fawt2" repeats="3" />
+        <FastRelax name="cartrelax" scorefxn="fawt2" repeats="1" cartesian="1" />
+    </MOVERS>
+    <APPLY_TO_POSE>
+    </APPLY_TO_POSE>
+    <PROTOCOLS>
+        <Add mover="sym"/>
+        <Add mover="csts"/>
+        <Add mover="relax1"/>
+        Add mover="relax3"/>
+        Add mover="cartrelax"/>
+    </PROTOCOLS>
+    <OUTPUT scorefxn="fawt2"/>
+    OUTPUT scorefxn="cenwt"/>
+</ROSETTASCRIPTS>
